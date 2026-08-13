@@ -48,6 +48,7 @@ metadata:
 | maps | 地名/坐标/POI/距离 | 地理坐标问题 |
 | grounded-citations | 来源追溯 + 逐字证据 | 引用/来源问题 |
 | scrapling | 抓取兜底 | 页面抓取问题 |
+| financial-infra-timeline | 交易所/券商/金融品种时间线 | 金融历史偏差问题 |
 
 **进化纪律**：解决一个新问题后，立刻 patch 进对应 skill（含问题现象 + 解法 + 来源），并同步 GitHub（若已脱敏同步）。不要等到积累一堆再补。
 
