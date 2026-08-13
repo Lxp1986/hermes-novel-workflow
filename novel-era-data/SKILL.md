@@ -1,6 +1,6 @@
 ---
 name: novel-era-data
-description: "Use when 查小说年代数据：历史汇率、历史天气、某年物价/事件/产品上市时间线。"
+description: "Use when 查小说年代数据：历史汇率、历史天气、农历日期/节气/节日、某年物价/事件/产品时间线。"
 version: 1.0.0
 author: anonymous
 license: MIT
@@ -25,6 +25,7 @@ metadata:
 |---|---|---|---|
 | 历史汇率 | Frankfurter（ECB 官方参考汇率） | 1999 至今，逐日 | scripts/exchange_rate.py |
 | 历史天气 | Open-Meteo（ERA5 再分析） | 1940 至今，逐日/逐小时 | scripts/historical_weather.py |
+| 农历日期 | zhdate（纯 Python，已附带） | 1900–2100，公历↔农历+节气+节日 | scripts/lunar_date.py |
 
 ## 用法
 
@@ -46,6 +47,21 @@ python scripts/historical_weather.py 22.25 111.69 2013-01-01 2013-01-07
 ```
 
 加 `--hourly` 出逐小时温度/降水（用于写「那天下午下雨」）。
+
+### 农历日期（公历↔农历 + 节气 + 节日）
+
+```bash
+python scripts/lunar_date.py 2013-01-01
+# → 2013-01-01 星期二 | 农历 二零一二年十一月二十 壬辰年 (龙年) | 节日: 元旦
+
+python scripts/lunar_date.py 2013-01-01 --range 45
+# → 列出该日前后 45 天的所有节气/节日（找最近的春节、清明等）
+
+python scripts/lunar_date.py lunar 2013 1 1
+# → 农历 2013年1月1日 → 公历 2013-02-10 星期日（春节）
+```
+
+用途：验证时间逻辑——公历农历对得上、节日习俗不搞错（如「元旦说过年」「清明拜山写错日子」）。
 
 ## 注意事项
 
