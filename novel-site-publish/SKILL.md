@@ -69,6 +69,9 @@ aside: true
 ## 已知坑（务必遵守）
 
 - **hexo deploy 是全量覆盖**，本地落后远程时直接部署会丢内容（双副本不同步的教训）。
+- **仓库若配了 GitHub Actions 自动部署（deploy.yml：push main → hexo clean && generate → force_orphan 推 gh-pages），本地不要手动 `npx hexo deploy`**（踩坑 2026-08-22 第21章：本地 deploy 与 Actions 双写 gh-pages 竞争，本地推送被 Actions 覆盖；正确流程 = 只 `git push origin main`，等 Actions 完成，再 curl 线上验证）。
+- **部署后线上 404 ≠ 部署失败**（踩坑 2026-08-22）：CF CDN 可能缓存部署完成前首次访问的 404 响应（忽略查询参数，`?v=` 也命中缓存），且 GitHub Pages 重建需 1-3 分钟。验证流程：先 `curl raw.githubusercontent.com/<repo>/gh-pages/<path>` 确认产物在 → 等 2 分钟 → 再 curl 站点 URL 看正文（不要只看状态码）。
+- **新增静态资源（图片/二维码/JS/CSS）同样会被 CF 缓存 404**（踩坑 2026-08-17 打赏二维码）：首次访问新图片若赶上部署间隙，CF 会缓存该 404，之后一直 404。解法：① 资源改名（如 `xxx-qr.jpg` → 新文件名）强制新 URL；② 或 CF Dashboard purge 缓存；③ 发布流程末尾统一 `curl` 验证所有新增资源 URL 返回 200 且是正确内容（图片看 content-type/大小，不能只看状态码）。
 - **双副本**（主副本 + 第二副本）必须保持同一版本。
 - **date 用实际发布日期**，不是故事时间线（否则归档错乱）。
 - **对白不用方言字**（易笔误），一律普通话。
